@@ -1,8 +1,12 @@
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.7.0;
 
 contract Polling_System {
 
     uint256 public number_of_polls = 0;
+    address public owner;
+
+    mapping(address => User) public Users;
     mapping(uint => Poll) public List_of_Polls;
     
     struct Poll {
@@ -20,6 +24,10 @@ contract Polling_System {
         bool voted;  // if true, that person already voted on a poll
         address delegate; // account of person who has voted
         uint vote;   // index of the voted choice
+    }
+
+    constructor() {
+        owner = msg.sender;
     }
 
     function createPoll(uint256 _set_time, string memory _question, string memory _choice1,  string memory _choice2,  string memory _choice3 ) public {
