@@ -7,7 +7,7 @@ contract Polling_System {
     uint256 public number_of_users = 0;
     address public owner;
 
-    mapping(uint256 => User) public Users;
+    mapping(address => User) public Users;
     mapping(uint256 => Poll) public List_of_Polls;
     
     struct Poll {
@@ -23,15 +23,11 @@ contract Polling_System {
     
     struct User {
         bool voted;  // if true, that person already voted on a poll
-        address delegate; // account of person who has voted
-        uint vote;   // index of the voted choice
     }
 
     constructor() {
         owner = msg.sender;
-        Users[number_of_users + 1].voted = false;
-        Users[number_of_users + 1].delegate = owner;
-        Users[number_of_users + 1].vote = 100;
+        Users[msg.sender].voted = false;
         number_of_users +=1;
     }
 
@@ -48,6 +44,7 @@ contract Polling_System {
     }
 
     function addVote(uint256 _select_poll, uint256 _select_choice) public {
+        require(!Users[msg.sender].voted, "You have already voted");
         require(_select_choice <= 3, "Please choose a choice between numbers 1 and 3");
         require(_select_poll <= number_of_polls, "Please choose a correct Poll number to vote");
         if(_select_choice == 1) {
@@ -59,6 +56,8 @@ contract Polling_System {
         if(_select_choice == 3) {
             List_of_Polls[_select_poll].choice3_count += 1;
         }
+
+        Users[msg.sender].voted = true;
 
     }
 
