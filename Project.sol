@@ -65,11 +65,11 @@ contract Polling_System {
         require(_select_poll <= number_of_polls, "Please choose a correct Poll number to Display winner");
         uint256 max_count = 0;
         string memory max_string;
-        if(List_of_Polls[_select_poll].choice1_count > max_count) {
+        if(List_of_Polls[_select_poll].choice1_count >= max_count) {    // by default we set our winner to first choice
             max_count = List_of_Polls[_select_poll].choice1_count;
             max_string = List_of_Polls[_select_poll].choice1;
         }
-        if(List_of_Polls[_select_poll].choice2_count > max_count) {
+        if(List_of_Polls[_select_poll].choice2_count > max_count) {     // Conditions to see if we have other winners
             max_count = List_of_Polls[_select_poll].choice2_count;
             max_string = List_of_Polls[_select_poll].choice2;
         }
@@ -80,4 +80,5 @@ contract Polling_System {
         return max_string;
 
     }
+
 }
