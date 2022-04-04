@@ -39,7 +39,7 @@ contract Polling_System {
     }
 
     // Interface for displayWinner
-    function displayWinner(uint256 _select_poll) public returns (string memory)  {
+    function displayWinner(uint256 _select_poll) public view returns (string memory)  {
         require(_select_poll <= number_of_polls, "Please choose a correct Poll number to Display winner");
         uint256 max_count = 0;
         string memory max_string;
@@ -107,6 +107,12 @@ contract Polling_System {
 
     }
 
+    function checkpoll(uint256 _select_poll) public view{
+        if (block.timestamp >= (List_of_Polls[_select_poll].set_time + List_of_Polls[_select_poll].created_time)) {
+            displayWinner(_select_poll);
+        }
+    }
+
     // Interface for creating a poll
 
     function createPoll(uint256 _set_time, string memory _question, string memory _choice1,  string memory _choice2,  string memory _choice3 ) public {
@@ -121,9 +127,6 @@ contract Polling_System {
         List_of_Polls[number_of_polls + 1].choice3_count = 0;
         number_of_polls +=1;
 
-        if (block.timestamp >= List_of_Polls[number_of_polls + 1].set_time + List_of_Polls[number_of_polls + 1].created_time) {
-            displayWinner(number_of_polls);
-        }
     }
 
     // Interface for adding vote on a poll
