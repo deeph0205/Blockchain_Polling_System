@@ -40,6 +40,11 @@ contract Polling_System {
 
     // Interface for displayWinner
     function displayWinner(uint256 _select_poll) public view returns (string memory)  {
+
+        if (block.timestamp >= (List_of_Polls[_select_poll].set_time + List_of_Polls[_select_poll].created_time)) {
+            displayWinner(_select_poll);
+        }
+
         require(_select_poll <= number_of_polls, "Please choose a correct Poll number to Display winner");
         uint256 max_count = 0;
         string memory max_string;
@@ -132,6 +137,10 @@ contract Polling_System {
     // Interface for adding vote on a poll
 
     function addVote(uint256 _select_poll, uint256 _select_choice) public {
+        if (block.timestamp >= (List_of_Polls[_select_poll].set_time + List_of_Polls[_select_poll].created_time)) {
+            displayWinner(_select_poll);
+        }
+
         require(!Users[msg.sender].voted, "You have already voted");
         require(_select_choice <= 3, "Please choose a choice between numbers 1 and 3");
         require(_select_poll <= number_of_polls, "Please choose a correct Poll number to vote");
