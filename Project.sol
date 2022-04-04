@@ -41,10 +41,6 @@ contract Polling_System {
     // Interface for displayWinner
     function displayWinner(uint256 _select_poll) public view returns (string memory)  {
 
-        if (block.timestamp >= (List_of_Polls[_select_poll].set_time + List_of_Polls[_select_poll].created_time)) {
-            displayWinner(_select_poll);
-        }
-
         require(_select_poll <= number_of_polls, "Please choose a correct Poll number to Display winner");
         uint256 max_count = 0;
         string memory max_string;
@@ -140,21 +136,22 @@ contract Polling_System {
         if (block.timestamp >= (List_of_Polls[_select_poll].set_time + List_of_Polls[_select_poll].created_time)) {
             displayWinner(_select_poll);
         }
+        else {
+            require(!Users[msg.sender].voted, "You have already voted");
+            require(_select_choice <= 3, "Please choose a choice between numbers 1 and 3");
+            require(_select_poll <= number_of_polls, "Please choose a correct Poll number to vote");
+            if(_select_choice == 1) {
+                List_of_Polls[_select_poll].choice1_count += 1;
+            }
+            if(_select_choice == 2) {
+                List_of_Polls[_select_poll].choice2_count += 1;
+            }
+            if(_select_choice == 3) {
+                List_of_Polls[_select_poll].choice3_count += 1;
+            }
 
-        require(!Users[msg.sender].voted, "You have already voted");
-        require(_select_choice <= 3, "Please choose a choice between numbers 1 and 3");
-        require(_select_poll <= number_of_polls, "Please choose a correct Poll number to vote");
-        if(_select_choice == 1) {
-            List_of_Polls[_select_poll].choice1_count += 1;
+            Users[msg.sender].voted = true;
         }
-        if(_select_choice == 2) {
-            List_of_Polls[_select_poll].choice2_count += 1;
-        }
-        if(_select_choice == 3) {
-            List_of_Polls[_select_poll].choice3_count += 1;
-        }
-
-        Users[msg.sender].voted = true;
 
     }
 
