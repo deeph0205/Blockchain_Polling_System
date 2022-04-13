@@ -17,6 +17,7 @@ contract Polling_System {
     struct Poll {
         uint256 set_time;
         uint256 created_time;                       // Time the poll lasts
+        bool is_active;
         string question;                        // Question for poll
         string choice1;                         // Three choices with their count information
         uint256 choice1_count;
@@ -37,6 +38,7 @@ contract Polling_System {
         Users[msg.sender].voted = false;
         number_of_users +=1;
     }
+    
 
     // Interface for displayWinner
     function displayWinner(uint256 _select_poll) public view returns (string memory)  {
@@ -108,10 +110,11 @@ contract Polling_System {
 
     }
 
-    function checkpoll(uint256 _select_poll) public view{
+    function checkpoll(uint256 _select_poll) public returns (bool) {
         if (block.timestamp >= (List_of_Polls[_select_poll].set_time + List_of_Polls[_select_poll].created_time)) {
-            displayWinner(_select_poll);
+            List_of_Polls[_select_poll].is_active = false;
         }
+        return List_of_Polls[_select_poll].is_active;
     }
 
     // Interface for creating a poll
@@ -119,6 +122,7 @@ contract Polling_System {
     function createPoll(uint256 _set_time, string memory _question, string memory _choice1,  string memory _choice2,  string memory _choice3 ) public {
         List_of_Polls[number_of_polls + 1].set_time =  _set_time;
         List_of_Polls[number_of_polls + 1].created_time = block.timestamp;
+        List_of_Polls[number_of_polls + 1].is_active = true;
         List_of_Polls[number_of_polls + 1].question = _question;
         List_of_Polls[number_of_polls + 1].choice1 = _choice1;
         List_of_Polls[number_of_polls + 1].choice1_count = 0;
@@ -133,27 +137,23 @@ contract Polling_System {
     // Interface for adding vote on a poll
 
     function addVote(uint256 _select_poll, uint256 _select_choice) public {
-        if (block.timestamp >= (List_of_Polls[_select_poll].set_time + List_of_Polls[_select_poll].created_time)) {
-            displayWinner(_select_poll);
+        
+        require(checkpoll(_select_poll) == true, "Poll has already expired, select another poll to vote");
+        require(!Users[msg.sender].voted, "You have already voted");
+        require(_select_choice <= 3, "Please choose a choice between numbers 1 and 3");
+        require(_select_poll <= number_of_polls, "Please choose a correct Poll number to vote");
+        if(_select_choice == 1) {
+            List_of_Polls[_select_poll].choice1_count += 1;
         }
-        else {
-            require(!Users[msg.sender].voted, "You have already voted");
-            require(_select_choice <= 3, "Please choose a choice between numbers 1 and 3");
-            require(_select_poll <= number_of_polls, "Please choose a correct Poll number to vote");
-            if(_select_choice == 1) {
-                List_of_Polls[_select_poll].choice1_count += 1;
-            }
-            if(_select_choice == 2) {
-                List_of_Polls[_select_poll].choice2_count += 1;
-            }
-            if(_select_choice == 3) {
-                List_of_Polls[_select_poll].choice3_count += 1;
-            }
+        if(_select_choice == 2) {
+            List_of_Polls[_select_poll].choice2_count += 1;
+        }
+        if(_select_choice == 3) {
+            List_of_Polls[_select_poll].choice3_count += 1;
+        }
 
-            Users[msg.sender].voted = true;
-        }
+        Users[msg.sender].voted = true;
 
     }
 
-    
 }
