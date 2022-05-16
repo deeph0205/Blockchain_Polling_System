@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title> Let's add a pole </title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-push-2">
+          <h1 class="text-center"> Let's add a pole </h1>
+          <hr/>
+          <br/>
+        </div>
+      </div>
+
+      <form name = "poll_form" action="./index.html" method="get" onSubmit = "App.createPoll(); return false;">
+        <label for="question"> Enter your question here </label><br>
+        <input type="text" id="question" name="question" placeholder="Add a question here"><br>
+
+        <label for="settime"> Enter a time limit for poll here </label><br>
+        <input type="number" id="settime" name="settime" placeholder="1000"><br>
+
+        <label for="choice1"> Enter your first choice </label><br>
+        <input type="text" id="choice1" name="choice" placeholder="Add your first choice"><br>
+
+        <label for="choice2"> Enter your question here </label><br>
+        <input type="text" id="choice2" name="choice" placeholder="Add your second choice"><br>
+
+        <label for="choice3"> Enter your question here </label><br>
+        <input type="text" id="choice3" name="choice" placeholder="Add your third choice"><br>
+
+        <button type="submit" class="btn btn-primary">Create the poll</button>
+        <hr />
+      </form>
+
+      
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/web3.min.js"></script>
+    <script src="js/truffle-contract.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
